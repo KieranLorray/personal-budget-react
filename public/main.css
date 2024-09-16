@@ -7,22 +7,22 @@ body {
     font-family: Tahoma, Arial;
 }
 
-div.menu {
+.menu {
     width: 100%;
     background-color: #4d5791;
     height: 44px;
     padding: 0 40px;
 }
 
-div.menu ul,
-div.menu ul li {
+.menu ul,
+.menu ul li {
     margin: 0;
     padding: 0 ;
     list-style: none;
     display: inline-block;
 }
 
-div.menu ul li a {
+.menu ul li a {
     display: block;
     padding: 0 20px;
     line-height: 44px;
@@ -32,34 +32,34 @@ div.menu ul li a {
     margin: 0;
 }
 
-div.menu ul li a:hover  {
+.menu ul li a:hover  {
     background-color: white;
     color: #4d5791;
 }
 
-div.hero {
+.hero {
     height: 350px;
     background-color: #b4c6f0;
-    background-image: url('/bg.png');
+    background-image: url('bg.png');
     background-size: 400px;
     background-repeat: no-repeat;
     background-position: center bottom;
     padding-top: 40px;
 }
 
-div.hero h1,
-div.hero h2 {
+.hero h1,
+.hero h2 {
     text-align: center;
     margin: 0;
 }
 
-div.hero h1 {
+.hero h1 {
     color: #fff;
     font-size: 4.2em;
     margin-bottom: 20px;
 }
 
-div.hero h2 {
+.hero h2 {
     color: #4d5791;
 }
 
