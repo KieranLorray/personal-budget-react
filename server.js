@@ -29,8 +29,8 @@ app.get('/hello', (req, res) => {
 
 app.get('/budget', (req, res) => {
     fs.readFile('budget-data.json', 'utf8', (err, data) => {
-            const budgetData = JSON.parse(data);
-            res.json(budgetData);
+        const budgetData = JSON.parse(data);
+        res.json(budgetData);
     });
 });
 

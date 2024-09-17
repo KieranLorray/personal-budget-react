@@ -17,6 +17,30 @@
 
     <link rel="stylesheet" href="reset.css">
     <link rel="stylesheet" href="main.css">
+
+    <style>
+        #d3-chart {
+            width: 400px;
+            height: 400px;
+            margin: 0 auto;
+        }
+        .slice {
+            cursor: pointer;
+        }
+        .slice .main-arc {
+            stroke: #fff;
+            stroke-width: 1px;
+        }
+        .slice .hidden-arc {
+            fill: none;
+        }
+        .slice text {
+            pointer-events: none;
+            dominant-baseline: middle;
+            text-anchor: middle;
+        }
+    </style>
+
 </head>
 
 <body>
@@ -74,6 +98,12 @@
                     <canvas id="myChart" width="400" height="400"></canvas>
                 </p>
             </div>
+
+            <div class="text-box" aria-labelledby="d3-chart-heading"></div>
+                <h1 id="d3-chart-heading">D3.js Budget Visualization</h1>
+                <div id="d3-chart"></div>
+            </div>
+
         </section>
     </main>
 
@@ -86,6 +116,7 @@
     </footer>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.20.0/axios.min.js" integrity="sha512-quHCp3WbBNkwLfYUMd+KwBAgpVukJu5MncuQaWXgCrfgcxCJAq/fo+oqrRKOj+UKEmyMCG3tb8RB63W+EmrOBg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.2/Chart.bundle.js" integrity="sha512-grgAcvAM7Ks/aaBNmpoAiN5oo210eyo4TrPuuibAmmTNvVBYkcLYHIiaiH3KPE+Pw8MKaxmPy6W/Q9xApkU6Kw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js" integrity="sha512-vc58qvvBdrDR4etbxMdlTt4GBQk1qjvyORR2nrsPsFPyrs+/u5c3+1Ct6upOgdZoIl7eq6k3a1UPDSNAQi/32A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
         
         var dataSource = {
@@ -119,19 +150,105 @@
             });
         }
 
-        function getBudget(){
-            axios.get('/budget')
-            .then(function (res) {
-                console.log(res);
-                for (var i = 0; i < res.data.myBudget.length; i++) {
-                   dataSource.datasets[0].data[i] = res.data.myBudget[i].budget;
-                    dataSource.labels[i] = res.data.myBudget[i].title;
-                }
-                createChart();
-            })
+        function createChart(){
+            var ctx = document.getElementById("myChart").getContext("2d");
+            var myPieChart = new Chart(ctx, {
+                type: 'pie',
+                data: dataSource
+            });
         }
+
+        function createD3Chart(data) {
+            d3.select("#d3-chart").html("");
+
+            const width = 500;
+            const height = 500;
+            const radius = Math.min(width, height) / 2;
+
+            const color = d3.scaleOrdinal(d3.schemeCategory10);
+
+            const svg = d3.select("#d3-chart")
+                .append("svg")
+                .attr("width", width)
+                .attr("height", height)
+                .append("g")
+                .attr("transform", `translate(${width / 2},${height / 2})`);
+
+            const pie = d3.pie()
+                .sort(null)
+                .value(d => d.budget);
+
+            const arc = d3.arc()
+                .outerRadius(radius * 0.8)
+                .innerRadius(radius * 0.4);
+
+            const outerArc = d3.arc()
+                .innerRadius(radius * 0.9)
+                .outerRadius(radius * 0.9);
+
+            const pieData = pie(data);
+
+            // Pie slices
+            const slice = svg.selectAll("g.slice")
+                .data(pieData)
+                .enter()
+                .append("g")
+                .attr("class", "slice");
+
+            slice.append("path")
+                .attr("d", arc)
+                .attr("fill", d => color(d.data.title))
+                .attr("stroke", "white")
+                .style("stroke-width", "2px");
+
+            // Labels
+            const text = slice.append("text")
+                .attr("transform", d => {
+                    const pos = arc.centroid(d);
+                    const midAngle = d.startAngle + (d.endAngle - d.startAngle) / 2;
+                    pos[0] = radius * 0.6 * Math.cos(midAngle - Math.PI / 2);
+                    pos[1] = radius * 0.6 * Math.sin(midAngle - Math.PI / 2);
+                    return `translate(${pos})`;
+                })
+                .attr("dy", "0.35em")
+                .attr("text-anchor", "middle")
+                .text(d => d.data.title);
+
+            // Add lines
+            const polyline = slice.append("polyline")
+                .attr("points", d => {
+                    const pos = arc.centroid(d);
+                    const midAngle = d.startAngle + (d.endAngle - d.startAngle) / 2;
+                    const x = radius * 0.8 * Math.cos(midAngle - Math.PI / 2);
+                    const y = radius * 0.8 * Math.sin(midAngle - Math.PI / 2);
+                    return [arc.centroid(d), [x, y]];
+                })
+                .style("fill", "none")
+                .style("stroke", "black")
+                .style("stroke-width", "1px");
+        }
+
+
+        function getBudget() {
+        axios.get('/budget')
+        .then(function (res) {
+            console.log(res);
+            const budgetData = res.data.myBudget;
+            
+            // Update Chart.js data
+            dataSource.datasets[0].data = budgetData.map(item => item.budget);
+            dataSource.labels = budgetData.map(item => item.title);
+            
+            createChart(); // This creates/updates the Chart.js chart
+            createD3Chart(budgetData); // This creates the D3.js chart with external labels
+        })
+        .catch(function (error) {
+            console.error("Error fetching budget data:", error);
+        });
+    }
+        
         getBudget();
-        createChart();
+        //createChart();
     </script>
 </body>
 
