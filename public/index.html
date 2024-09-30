@@ -1,255 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta
+      name="description"
+      content="Web site created using create-react-app"
+    />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <!--
+      manifest.json provides metadata used when your web app is installed on a
+      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
+    -->
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <!--
+      Notice the use of %PUBLIC_URL% in the tags above.
+      It will be replaced with the URL of the `public` folder during the build.
+      Only files inside the `public` folder can be referenced from the HTML.
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Personal Budget - Budget Management App</title>
-    
-    <!-- This is an SEO Change -->
-    <meta name="description" content="Manage your personal budget effectively with our budget management app. Stay on track with alerts, real data, and more.">
+      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
+      work correctly both with client-side routing and a non-root public URL.
+      Learn how to configure a non-root public URL by running `npm run build`.
+    -->
+    <title>React App</title>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <!--
+      This HTML file is a template.
+      If you open it directly in the browser, you will see an empty page.
 
-    <!-- This is an SEO Change -->
-    <meta name="keywords" content="personal budget, budget management, financial planning, track expenses, free budget app">
+      You can add webfonts, meta tags, or analytics to this file.
+      The build step will place the bundled scripts into the <body> tag.
 
-    <!-- This is an SEO Change -->
-    <meta name="author" content="Kieran Lorray">
-
-    <link rel="stylesheet" href="reset.css">
-    <link rel="stylesheet" href="main.css">
-
-    <style>
-        #d3-chart {
-            width: 400px;
-            height: 400px;
-            margin: 0 auto;
-        }
-        .slice {
-            cursor: pointer;
-        }
-        .slice .main-arc {
-            stroke: #fff;
-            stroke-width: 1px;
-        }
-        .slice .hidden-arc {
-            fill: none;
-        }
-        .slice text {
-            pointer-events: none;
-            dominant-baseline: middle;
-            text-anchor: middle;
-        }
-    </style>
-
-</head>
-
-<body>
-
-    <!-- This is a Semantic HTML Change -->
-    <nav class="menu">
-        <ul>
-            <li><a href="/">Homepage</a></li>
-            <li><a href="about.html">About</a></li>
-            <li><a href="login.html">Login</a></li>
-            <li><a href="https://google.com">Google</a></li>
-        </ul>
-    </nav>
-
-    <!-- This is a Semantic HTML Change -->
-    <header class="hero">
-        <h1>Personal Budget</h1>
-        <h2>A personal-budget management app</h2>
-    </header>
-
-    <main class="container center">
-        <section class="page-area">
-            <!-- This is an A11y Change -->
-            <div class="text-box" aria-labelledby="stay-track-heading">
-                <h1 id="stay-track-heading">Stay on track</h1>
-                <p>
-                    Do you know where you are spending your money? If you really stop to track it down,
-                    you would get surprised! Proper budget management depends on real data... and this
-                    app will help you with that!
-                </p>
-            </div>
-
-            <div class="text-box" aria-labelledby="alerts-heading">
-                <!-- This is an A11y Change -->
-                <h1 id="alerts-heading">Alerts</h1>
-                <p>
-                    What if your clothing budget ended? You will get an alert. The goal is to never go over the budget.
-                </p>
-            </div>
-
-            <div class="text-box" aria-labelledby="results-heading">
-                <!-- This is an A11y Change -->
-                <h1 id="results-heading">Results</h1>
-                <p>
-                    People who stick to a financial plan, budgeting every expense, get out of debt faster!
-                    Also, they live happier lives... since they expend without guilt or fear...
-                    because they know it is all good and accounted for.
-                </p>
-            </div>
-
-            <div class="text-box" aria-labelledby="free-heading">
-                <!-- This is a Semantic HTML Change -->
-                <h1 id="free-heading">Free</h1>
-                <p>
-                    <canvas id="myChart" width="400" height="400"></canvas>
-                </p>
-            </div>
-
-            <div class="text-box" aria-labelledby="d3-chart-heading"></div>
-                <h1 id="d3-chart-heading">D3.js Budget Visualization</h1>
-                <div id="d3-chart"></div>
-            </div>
-
-        </section>
-    </main>
-
-    <!-- This is a Semantic HTML Change -->
-    <footer class="bottom">
-        <div class="center">
-            All rights reserved &copy; Kieran Lorray
-        </div>
-        
-    </footer>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.20.0/axios.min.js" integrity="sha512-quHCp3WbBNkwLfYUMd+KwBAgpVukJu5MncuQaWXgCrfgcxCJAq/fo+oqrRKOj+UKEmyMCG3tb8RB63W+EmrOBg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.2/Chart.bundle.js" integrity="sha512-grgAcvAM7Ks/aaBNmpoAiN5oo210eyo4TrPuuibAmmTNvVBYkcLYHIiaiH3KPE+Pw8MKaxmPy6W/Q9xApkU6Kw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js" integrity="sha512-vc58qvvBdrDR4etbxMdlTt4GBQk1qjvyORR2nrsPsFPyrs+/u5c3+1Ct6upOgdZoIl7eq6k3a1UPDSNAQi/32A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script>
-        
-        var dataSource = {
-            datasets: [
-                {
-                data: [],
-                backgroundColor: [
-                '#ffcd56',
-                '#ff6384',
-                '#36a2eb',
-                '#fd6b19',
-                '#4bc0c0',
-                '#9966ff',
-                '#c9cbcf'
-                    ]
-                }
-
-                ],
-                labels: [
-                    'Eat out',
-                    'Rent',
-                    'Groceries'
-                ]
-            };
-
-        function createChart(){
-            var ctx = document.getElementById("myChart").getContext("2d");
-            var myPieChart = new Chart(ctx, {
-                type: 'pie',
-                data: dataSource
-            });
-        }
-
-        function createChart(){
-            var ctx = document.getElementById("myChart").getContext("2d");
-            var myPieChart = new Chart(ctx, {
-                type: 'pie',
-                data: dataSource
-            });
-        }
-
-        function createD3Chart(data) {
-            d3.select("#d3-chart").html("");
-
-            const width = 500;
-            const height = 500;
-            const radius = Math.min(width, height) / 2;
-
-            const color = d3.scaleOrdinal(d3.schemeCategory10);
-
-            const svg = d3.select("#d3-chart")
-                .append("svg")
-                .attr("width", width)
-                .attr("height", height)
-                .append("g")
-                .attr("transform", `translate(${width / 2},${height / 2})`);
-
-            const pie = d3.pie()
-                .sort(null)
-                .value(d => d.budget);
-
-            const arc = d3.arc()
-                .outerRadius(radius * 0.8)
-                .innerRadius(radius * 0.4);
-
-            const outerArc = d3.arc()
-                .innerRadius(radius * 0.9)
-                .outerRadius(radius * 0.9);
-
-            const pieData = pie(data);
-
-            // Pie slices
-            const slice = svg.selectAll("g.slice")
-                .data(pieData)
-                .enter()
-                .append("g")
-                .attr("class", "slice");
-
-            slice.append("path")
-                .attr("d", arc)
-                .attr("fill", d => color(d.data.title))
-                .attr("stroke", "white")
-                .style("stroke-width", "2px");
-
-            // Labels
-            const text = slice.append("text")
-                .attr("transform", d => {
-                    const pos = arc.centroid(d);
-                    const midAngle = d.startAngle + (d.endAngle - d.startAngle) / 2;
-                    pos[0] = radius * 0.6 * Math.cos(midAngle - Math.PI / 2);
-                    pos[1] = radius * 0.6 * Math.sin(midAngle - Math.PI / 2);
-                    return `translate(${pos})`;
-                })
-                .attr("dy", "0.35em")
-                .attr("text-anchor", "middle")
-                .text(d => d.data.title);
-
-            // Add lines
-            const polyline = slice.append("polyline")
-                .attr("points", d => {
-                    const pos = arc.centroid(d);
-                    const midAngle = d.startAngle + (d.endAngle - d.startAngle) / 2;
-                    const x = radius * 0.8 * Math.cos(midAngle - Math.PI / 2);
-                    const y = radius * 0.8 * Math.sin(midAngle - Math.PI / 2);
-                    return [arc.centroid(d), [x, y]];
-                })
-                .style("fill", "none")
-                .style("stroke", "black")
-                .style("stroke-width", "1px");
-        }
-
-
-        function getBudget() {
-        axios.get('/budget')
-        .then(function (res) {
-            console.log(res);
-            const budgetData = res.data.myBudget;
-            
-            // Update Chart.js data
-            dataSource.datasets[0].data = budgetData.map(item => item.budget);
-            dataSource.labels = budgetData.map(item => item.title);
-            
-            createChart(); // This creates/updates the Chart.js chart
-            createD3Chart(budgetData); // This creates the D3.js chart with external labels
-        })
-        .catch(function (error) {
-            console.error("Error fetching budget data:", error);
-        });
-    }
-        
-        getBudget();
-        //createChart();
-    </script>
-</body>
-
+      To begin the development, run `npm start` or `yarn start`.
+      To create a production bundle, use `npm run build` or `yarn build`.
+    -->
+  </body>
 </html>
